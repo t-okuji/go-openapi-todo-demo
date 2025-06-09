@@ -38,17 +38,23 @@ go run main.go
 # アプリケーションのビルド
 go build -v .
 
+# コード品質チェック
+go vet ./...
+go fmt ./...
+
 # 基本的な動作確認
 curl http://localhost:8080/
 
 # Todo API のテスト
 curl http://localhost:8080/todos
 
-# 依存関係の確認
+# 依存関係の確認・整理
 go list -m all
-
-# モジュールの整理
 go mod tidy
+go mod verify
+
+# Entコード生成（スキーマ変更時）
+go generate ./ent
 ```
 
 ### データベース管理
@@ -119,14 +125,16 @@ go-openapi-todo-demo/
    - Todo管理のためのカテゴリ分類機能
 
 ### 実装状況と注意点
-- **実装済み**: `GET /todos` エンドポイント（Todo一覧取得）
-- **未実装**: POST、PUT、DELETE エンドポイント、Category API
+- **実装済み**: Todo API完全実装（GET, POST, PUT, DELETE）
+- **未実装**: Category API（GET, POST, PUT, DELETE エンドポイント）
 - HTTPサーバーはChi v5フレームワークを使用
 - **環境変数**: .envファイルから自動読み込み（godotenv使用）
 - **DB接続**: 環境変数（POSTGRES_*）から動的に接続文字列を構築
 - API実装時はOpenAPI仕様に準拠すること
 - Entフレームワークを使用したORMによるデータベース操作
 - レスポンス形式はOpenAPI仕様に合わせてcamelCase（categoryId等）
+- 共通関数（sendJSONResponse、sendErrorResponse）を使用してレスポンス一貫性を保つ
+- UUID検証とエラーハンドリングはparseUUID関数を使用
 - 日本語でのコメントとドキュメント作成を推奨
 
 ### 環境変数設定
