@@ -1,0 +1,53 @@
+parameters:
+  - name: todoId
+    in: path
+    required: true
+    description: TodoのID
+    schema:
+      type: string
+get:
+  summary: Todo詳細取得
+  operationId: getTodoById
+  tags:
+    - todos
+  responses:
+    "200":
+      description: Todo取得成功
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/todo.yml#/Todo"
+    "404":
+      description: Todoが見つかりません
+put:
+  summary: Todo更新
+  operationId: updateTodo
+  tags:
+    - todos
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../components/schemas/todo.yml#/TodoInput"
+  responses:
+    "200":
+      description: Todo更新成功
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/todo.yml#/Todo"
+    "400":
+      description: 不正なリクエスト
+    "404":
+      description: Todoが見つかりません
+delete:
+  summary: Todo削除
+  operationId: deleteTodo
+  tags:
+    - todos
+  responses:
+    "204":
+      description: Todo削除成功
+    "404":
+      description: Todoが見つかりません

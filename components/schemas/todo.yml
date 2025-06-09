@@ -1,0 +1,53 @@
+Todo:
+  type: object
+  required:
+    - id
+    - title
+    - completed
+    - createdAt
+  properties:
+    id:
+      type: string
+      description: TodoのユニークID
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    title:
+      type: string
+      description: Todoのタイトル
+      example: "買い物に行く"
+    description:
+      type: string
+      description: Todoの詳細説明
+      example: "牛乳とパンを買う"
+    completed:
+      type: boolean
+      description: 完了状態
+      example: false
+    createdAt:
+      type: string
+      format: date-time
+      description: 作成日時
+      example: "2024-01-15T09:00:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: 更新日時
+      example: "2024-01-15T10:30:00Z"
+
+TodoInput:
+  type: object
+  required:
+    - title
+  properties:
+    title:
+      type: string
+      description: Todoのタイトル
+      example: "買い物に行く"
+    description:
+      type: string
+      description: Todoの詳細説明
+      example: "牛乳とパンを買う"
+    completed:
+      type: boolean
+      description: 完了状態
+      default: false
+      example: false
