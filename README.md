@@ -4,7 +4,12 @@ OpenAPI仕様を使用したTodo管理APIのデモプロジェクトです。カ
 
 ## 概要
 
-このプロジェクトは、OpenAPI 3.1.1仕様に基づいたREST APIの実装例です。Todo管理とカテゴリ管理の機能を提供し、モジュール化されたAPI仕様設計のベストプラクティスを示しています。
+このプロジェクトは、OpenAPI 3.1.1仕様に基づいたREST APIの実装例です。Go言語とEntフレームワークを使用してTodo管理とカテゴリ管理の機能を提供し、モジュール化されたAPI仕様設計のベストプラクティスを示しています。
+
+## 実装状況
+
+- ✅ **実装済み**: `GET /todos` エンドポイント（Todo一覧取得）
+- 🚧 **未実装**: POST、PUT、DELETE エンドポイント、Category API
 
 ## 機能
 
@@ -22,34 +27,41 @@ OpenAPI仕様を使用したTodo管理APIのデモプロジェクトです。カ
 
 - **言語**: Go 1.24.4
 - **Webフレームワーク**: Chi v5
+- **ORM**: Ent（EntGo）
+- **環境変数管理**: godotenv
+- **データベース**: PostgreSQL 17 Alpine
+- **コンテナ**: Docker/Docker Compose
 - **API仕様**: OpenAPI 3.1.1
 
 ## プロジェクト構造
 
 ```
 openapi-demo/
-├── main.go                    # メインアプリケーション
-├── openapi.yml               # OpenAPIメイン定義
-├── paths/                    # APIエンドポイント定義
-│   ├── todos.yml            # /todos エンドポイント
-│   ├── todos-id.yml         # /todos/{todoId} エンドポイント
-│   ├── categories.yml       # /categories エンドポイント
-│   └── categories-id.yml    # /categories/{categoryId} エンドポイント
-├── components/              # 共通コンポーネント
-│   └── schemas/            # データモデル定義
-│       ├── todo.yml        # Todoスキーマ
-│       └── category.yml    # Categoryスキーマ
+├── main.go                    # メインアプリケーション（Chi + Ent + godotenv）
+├── .env                       # 環境変数設定（DB接続情報）
+├── ent/                       # Entコード生成済みORM
+│   ├── schema/               # Entスキーマ定義
+│   ├── todo.go              # Todoエンティティ
+│   └── category.go          # Categoryエンティティ
+├── openapi/                   # OpenAPI仕様定義
+│   ├── openapi.yml           # メインAPI定義
+│   ├── paths/                # APIエンドポイント定義
+│   └── components/schemas/   # データモデル定義
+├── db/                       # データベース関連
+│   ├── schema.sql           # 完全スキーマ定義
+│   ├── seed.sql             # サンプルデータ
+│   └── migrations/          # マイグレーションファイル
+├── compose.yml              # Docker Compose設定
 └── architecture-decisions/  # アーキテクチャ決定記録
-    ├── 001-append-path.md  # API拡張計画
-    └── 001-category.md     # カテゴリ機能追加計画
 ```
 
 ## セットアップ
 
 ### 必要な環境
 - Go 1.24.4以上
+- Docker & Docker Compose
 
-### インストール
+### インストールと環境セットアップ
 ```bash
 # リポジトリのクローン
 git clone [repository-url]
@@ -57,6 +69,25 @@ cd openapi-demo
 
 # 依存関係のインストール
 go mod download
+
+# データベース起動
+docker compose up -d
+
+# データベース初期化
+docker compose exec postgres psql -U user -d demo -f /db/schema.sql
+
+# サンプルデータ投入（オプション）
+docker compose exec postgres psql -U user -d demo -f /db/seed.sql
+```
+
+### 環境変数設定
+`.env`ファイルにデータベース接続情報が設定済みです：
+```env
+POSTGRES_DB=demo
+POSTGRES_PORT=15432
+POSTGRES_HOST=localhost
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
 ```
 
 ## 使用方法
@@ -68,16 +99,25 @@ go run main.go
 
 サーバーは `http://localhost:8080` で起動します。
 
+### API テスト
+```bash
+# 基本的な動作確認
+curl http://localhost:8080/
+
+# Todo一覧取得
+curl http://localhost:8080/todos
+```
+
 ## API仕様
 
 ### Todo API
 
 #### エンドポイント一覧
-- `GET /todos` - Todo一覧の取得
-- `POST /todos` - 新規Todoの作成
-- `GET /todos/{todoId}` - 特定のTodoの取得
-- `PUT /todos/{todoId}` - Todoの更新
-- `DELETE /todos/{todoId}` - Todoの削除
+- ✅ `GET /todos` - Todo一覧の取得（実装済み）
+- 🚧 `POST /todos` - 新規Todoの作成（未実装）
+- 🚧 `GET /todos/{todoId}` - 特定のTodoの取得（未実装）
+- 🚧 `PUT /todos/{todoId}` - Todoの更新（未実装）
+- 🚧 `DELETE /todos/{todoId}` - Todoの削除（未実装）
 
 #### Todoデータモデル
 ```yaml
@@ -94,11 +134,11 @@ Todo:
 ### Category API
 
 #### エンドポイント一覧
-- `GET /categories` - カテゴリ一覧の取得
-- `POST /categories` - 新規カテゴリの作成
-- `GET /categories/{categoryId}` - 特定のカテゴリの取得
-- `PUT /categories/{categoryId}` - カテゴリの更新
-- `DELETE /categories/{categoryId}` - カテゴリの削除
+- 🚧 `GET /categories` - カテゴリ一覧の取得（未実装）
+- 🚧 `POST /categories` - 新規カテゴリの作成（未実装）
+- 🚧 `GET /categories/{categoryId}` - 特定のカテゴリの取得（未実装）
+- 🚧 `PUT /categories/{categoryId}` - カテゴリの更新（未実装）
+- 🚧 `DELETE /categories/{categoryId}` - カテゴリの削除（未実装）
 
 #### Categoryデータモデル
 ```yaml
@@ -123,4 +163,25 @@ Category:
 ## 開発
 
 ### API仕様の確認
-OpenAPI仕様ファイルは `openapi.yml` および `paths/`、`components/` ディレクトリ内のファイルで定義されています。
+OpenAPI仕様ファイルは `openapi/openapi.yml` および `openapi/paths/`、`openapi/components/` ディレクトリ内のファイルで定義されています。
+
+### データベース管理
+```bash
+# データベース接続
+docker compose exec postgres psql -U user -d demo
+
+# データベース停止
+docker compose down
+
+# データベース完全削除（ボリューム含む）
+docker compose down -v
+```
+
+### ビルドとテスト
+```bash
+# アプリケーションのビルド
+go build -v .
+
+# 依存関係の整理
+go mod tidy
+```
