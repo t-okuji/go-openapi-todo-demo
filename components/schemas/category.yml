@@ -1,0 +1,57 @@
+Category:
+  type: object
+  required:
+    - id
+    - name
+    - createdAt
+  properties:
+    id:
+      type: string
+      description: カテゴリのユニークID
+      example: "550e8400-e29b-41d4-a716-446655440001"
+    name:
+      type: string
+      description: カテゴリ名
+      example: "仕事"
+    description:
+      type: string
+      description: カテゴリの詳細説明
+      example: "業務に関連するタスク"
+    color:
+      type: string
+      description: カテゴリの表示色（HEXカラーコード）
+      pattern: "^#[0-9A-Fa-f]{6}$"
+      example: "#3498db"
+    createdAt:
+      type: string
+      format: date-time
+      description: 作成日時
+      example: "2024-01-15T09:00:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: 更新日時
+      example: "2024-01-15T10:30:00Z"
+
+CategoryInput:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: カテゴリ名
+      minLength: 1
+      maxLength: 50
+      example: "仕事"
+    description:
+      type: string
+      description: カテゴリの詳細説明
+      maxLength: 255
+      example: "業務に関連するタスク"
+    color:
+      type: string
+      description: カテゴリの表示色（HEXカラーコード）
+      pattern: "^#[0-9A-Fa-f]{6}$"
+      default: "#6c757d"
+      example: "#3498db"

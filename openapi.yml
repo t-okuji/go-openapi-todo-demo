@@ -9,3 +9,7 @@ paths:
     $ref: "./paths/todos.yml"
   /todos/{todoId}:
     $ref: "./paths/todos-id.yml"
+  /categories:
+    $ref: "./paths/categories.yml"
+  /categories/{categoryId}:
+    $ref: "./paths/categories-id.yml"

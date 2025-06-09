@@ -1,0 +1,34 @@
+get:
+  summary: カテゴリ一覧取得
+  operationId: getCategories
+  tags:
+    - categories
+  responses:
+    "200":
+      description: カテゴリ一覧の取得成功
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../components/schemas/category.yml#/Category"
+post:
+  summary: カテゴリ作成
+  operationId: createCategory
+  tags:
+    - categories
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../components/schemas/category.yml#/CategoryInput"
+  responses:
+    "201":
+      description: カテゴリ作成成功
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/category.yml#/Category"
+    "400":
+      description: 不正なリクエスト

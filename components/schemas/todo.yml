@@ -32,6 +32,10 @@ Todo:
       format: date-time
       description: 更新日時
       example: "2024-01-15T10:30:00Z"
+    categoryId:
+      type: string
+      description: 所属カテゴリのID（任意）
+      example: "550e8400-e29b-41d4-a716-446655440001"
 
 TodoInput:
   type: object
@@ -51,3 +55,7 @@ TodoInput:
       description: 完了状態
       default: false
       example: false
+    categoryId:
+      type: string
+      description: 所属カテゴリのID（任意）
+      example: "550e8400-e29b-41d4-a716-446655440001"

@@ -1,0 +1,53 @@
+parameters:
+  - name: categoryId
+    in: path
+    required: true
+    description: カテゴリのID
+    schema:
+      type: string
+get:
+  summary: カテゴリ詳細取得
+  operationId: getCategoryById
+  tags:
+    - categories
+  responses:
+    "200":
+      description: カテゴリ取得成功
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/category.yml#/Category"
+    "404":
+      description: カテゴリが見つかりません
+put:
+  summary: カテゴリ更新
+  operationId: updateCategory
+  tags:
+    - categories
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../components/schemas/category.yml#/CategoryInput"
+  responses:
+    "200":
+      description: カテゴリ更新成功
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/category.yml#/Category"
+    "400":
+      description: 不正なリクエスト
+    "404":
+      description: カテゴリが見つかりません
+delete:
+  summary: カテゴリ削除
+  operationId: deleteCategory
+  tags:
+    - categories
+  responses:
+    "204":
+      description: カテゴリ削除成功
+    "404":
+      description: カテゴリが見つかりません
