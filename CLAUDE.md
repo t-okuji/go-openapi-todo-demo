@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-OpenAPIを使用したTodo管理APIのデモプロジェクト。Go言語で実装され、カテゴリ機能付きのTodo管理システムを構築している。
+go-openapi-todo-demo - OpenAPIを使用したTodo管理APIのGoによる実装デモ。Entフレームワークを利用し、カテゴリ機能付きのTodo管理システムを構築している。
 
 ## 開発コマンド
 
@@ -76,7 +76,7 @@ docker compose down -v
 
 ### プロジェクト構造
 ```
-openapi-demo/
+go-openapi-todo-demo/
 ├── main.go                    # メインアプリケーション（Chi + Ent + godotenv）
 ├── .env                       # 環境変数設定（DB接続情報）
 ├── ent/                       # Entコード生成済みORM

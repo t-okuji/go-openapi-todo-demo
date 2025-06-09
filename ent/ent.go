@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/t-okuji/openapi-demo/ent/category"
-	"github.com/t-okuji/openapi-demo/ent/todo"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/category"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/todo"
 )
 
 // ent aliases to avoid import conflicts in user's code.

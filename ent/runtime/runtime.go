@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/t-okuji/openapi-demo/ent/runtime.go
+// The schema-stitching logic is generated in github.com/t-okuji/go-openapi-todo-demo/ent/runtime.go
 
 const (
 	Version = "v0.14.4"                                         // Version of ent codegen.

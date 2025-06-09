@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/t-okuji/openapi-demo/ent/category"
-	"github.com/t-okuji/openapi-demo/ent/todo"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/category"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/todo"
 )
 
 // Todo is the model entity for the Todo schema.

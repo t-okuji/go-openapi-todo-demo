@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/t-okuji/openapi-demo/ent/category"
-	"github.com/t-okuji/openapi-demo/ent/predicate"
-	"github.com/t-okuji/openapi-demo/ent/todo"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/category"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/predicate"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/todo"
 )
 
 // TodoUpdate is the builder for updating Todo entities.

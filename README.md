@@ -1,6 +1,6 @@
-# OpenAPI Demo - Todo管理API
+# Go OpenAPI Todo Demo
 
-OpenAPI仕様を使用したTodo管理APIのデモプロジェクトです。カテゴリ機能を含む完全なTodo管理システムのAPIを提供します。
+OpenAPI仕様を使用したTodo管理APIのGoによる実装デモです。カテゴリ機能を含む完全なTodo管理システムのAPIを提供します。
 
 ## 概要
 
@@ -36,7 +36,7 @@ OpenAPI仕様を使用したTodo管理APIのデモプロジェクトです。カ
 ## プロジェクト構造
 
 ```
-openapi-demo/
+go-openapi-todo-demo/
 ├── main.go                    # メインアプリケーション（Chi + Ent + godotenv）
 ├── .env                       # 環境変数設定（DB接続情報）
 ├── ent/                       # Entコード生成済みORM
@@ -65,7 +65,7 @@ openapi-demo/
 ```bash
 # リポジトリのクローン
 git clone [repository-url]
-cd openapi-demo
+cd go-openapi-todo-demo
 
 # 依存関係のインストール
 go mod download

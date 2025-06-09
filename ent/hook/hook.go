@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/t-okuji/openapi-demo/ent"
+	"github.com/t-okuji/go-openapi-todo-demo/ent"
 )
 
 // The CategoryFunc type is an adapter to allow the use of ordinary

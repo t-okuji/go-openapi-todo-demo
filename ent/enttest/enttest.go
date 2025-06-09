@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/t-okuji/openapi-demo/ent"
+	"github.com/t-okuji/go-openapi-todo-demo/ent"
 	// required by schema hooks.
-	_ "github.com/t-okuji/openapi-demo/ent/runtime"
+	_ "github.com/t-okuji/go-openapi-todo-demo/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/t-okuji/openapi-demo/ent/migrate"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/migrate"
 )
 
 type (

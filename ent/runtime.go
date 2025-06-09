@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/t-okuji/openapi-demo/ent/category"
-	"github.com/t-okuji/openapi-demo/ent/schema"
-	"github.com/t-okuji/openapi-demo/ent/todo"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/category"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/schema"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/todo"
 )
 
 // The init function reads all schema descriptors with runtime code

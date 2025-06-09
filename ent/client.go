@@ -10,14 +10,14 @@ import (
 	"reflect"
 
 	"github.com/google/uuid"
-	"github.com/t-okuji/openapi-demo/ent/migrate"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/t-okuji/openapi-demo/ent/category"
-	"github.com/t-okuji/openapi-demo/ent/todo"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/category"
+	"github.com/t-okuji/go-openapi-todo-demo/ent/todo"
 )
 
 // Client is the client that holds all ent builders.

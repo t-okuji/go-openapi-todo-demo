@@ -16,7 +16,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/t-okuji/openapi-demo/ent"
+	"github.com/t-okuji/go-openapi-todo-demo/ent"
 )
 
 // TodoResponse は API レスポンス用の Todo エンティティを表す

@@ -1,4 +1,4 @@
-module github.com/t-okuji/openapi-demo
+module github.com/t-okuji/go-openapi-todo-demo
 
 go 1.24.4
 
