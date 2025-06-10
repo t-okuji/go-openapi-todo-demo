@@ -81,7 +81,7 @@ func sendJSONResponse(w http.ResponseWriter, status int, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	if err := json.NewEncoder(w).Encode(data); err != nil {
-		log.Printf("JSON エンコードエラー: %v", err)
+		log.Printf("JSON encoding error: %v", err)
 	}
 }
 
@@ -97,7 +97,7 @@ func sendErrorResponse(w http.ResponseWriter, status int, code string, message s
 func parseUUID(w http.ResponseWriter, uuidStr string) (uuid.UUID, bool) {
 	id, err := uuid.Parse(uuidStr)
 	if err != nil {
-		sendErrorResponse(w, http.StatusBadRequest, "INVALID_UUID", "無効なUUID形式です")
+		sendErrorResponse(w, http.StatusBadRequest, "INVALID_UUID", "Invalid UUID format")
 		return uuid.UUID{}, false
 	}
 	return id, true
@@ -111,8 +111,8 @@ func getTodosHandler(client *ent.Client) http.HandlerFunc {
 		// データベースから全ての Todo を取得
 		todos, err := client.Todo.Query().All(ctx)
 		if err != nil {
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-			log.Printf("Todo 取得エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+			log.Printf("Todo fetch error: %v", err)
 			return
 		}
 
@@ -134,13 +134,13 @@ func createTodoHandler(client *ent.Client) http.HandlerFunc {
 		// リクエストボディをパース
 		var input TodoInput
 		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-			sendErrorResponse(w, http.StatusBadRequest, "INVALID_JSON", "不正なJSONフォーマットです")
+			sendErrorResponse(w, http.StatusBadRequest, "INVALID_JSON", "Invalid JSON format")
 			return
 		}
 
 		// タイトルの検証
 		if input.Title == "" {
-			sendErrorResponse(w, http.StatusBadRequest, "INVALID_REQUEST", "タイトルは必須です")
+			sendErrorResponse(w, http.StatusBadRequest, "INVALID_REQUEST", "Title is required")
 			return
 		}
 
@@ -170,12 +170,12 @@ func createTodoHandler(client *ent.Client) http.HandlerFunc {
 				Where(category.ID(categoryUUID)).
 				Exist(ctx)
 			if err != nil {
-				sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-				log.Printf("カテゴリ存在確認エラー: %v", err)
+				sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+				log.Printf("Category existence check error: %v", err)
 				return
 			}
 			if !exists {
-				sendErrorResponse(w, http.StatusBadRequest, "CATEGORY_NOT_FOUND", "指定されたカテゴリが存在しません")
+				sendErrorResponse(w, http.StatusBadRequest, "CATEGORY_NOT_FOUND", "Specified category not found")
 				return
 			}
 
@@ -185,8 +185,8 @@ func createTodoHandler(client *ent.Client) http.HandlerFunc {
 		// Todoを作成
 		todo, err := createQuery.Save(ctx)
 		if err != nil {
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Todoの作成に失敗しました")
-			log.Printf("Todo作成エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Failed to create Todo")
+			log.Printf("Todo creation error: %v", err)
 			return
 		}
 
@@ -212,11 +212,11 @@ func getTodoByIDHandler(client *ent.Client) http.HandlerFunc {
 		todo, err := client.Todo.Get(ctx, todoUUID)
 		if err != nil {
 			if ent.IsNotFound(err) {
-				sendErrorResponse(w, http.StatusNotFound, "TODO_NOT_FOUND", "指定されたTodoが見つかりません")
+				sendErrorResponse(w, http.StatusNotFound, "TODO_NOT_FOUND", "Specified Todo not found")
 				return
 			}
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-			log.Printf("Todo取得エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+			log.Printf("Todo fetch error: %v", err)
 			return
 		}
 
@@ -241,21 +241,21 @@ func updateTodoHandler(client *ent.Client) http.HandlerFunc {
 		// リクエストボディをパース
 		var input TodoInput
 		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-			sendErrorResponse(w, http.StatusBadRequest, "INVALID_JSON", "不正なJSONフォーマットです")
+			sendErrorResponse(w, http.StatusBadRequest, "INVALID_JSON", "Invalid JSON format")
 			return
 		}
 
 		// タイトルの検証
 		if input.Title == "" {
-			sendErrorResponse(w, http.StatusBadRequest, "INVALID_REQUEST", "タイトルは必須です")
+			sendErrorResponse(w, http.StatusBadRequest, "INVALID_REQUEST", "Title is required")
 			return
 		}
 
 		// 対象Todoの存在確認
 		exists, err := client.Todo.Query().Where(todo.ID(todoUUID)).Exist(ctx)
 		if err != nil {
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-			log.Printf("Todo存在確認エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+			log.Printf("Todo existence check error: %v", err)
 			return
 		}
 		if !exists {
@@ -295,12 +295,12 @@ func updateTodoHandler(client *ent.Client) http.HandlerFunc {
 					Where(category.ID(categoryUUID)).
 					Exist(ctx)
 				if err != nil {
-					sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-					log.Printf("カテゴリ存在確認エラー: %v", err)
+					sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+					log.Printf("Category existence check error: %v", err)
 					return
 				}
 				if !exists {
-					sendErrorResponse(w, http.StatusBadRequest, "CATEGORY_NOT_FOUND", "指定されたカテゴリが存在しません")
+					sendErrorResponse(w, http.StatusBadRequest, "CATEGORY_NOT_FOUND", "Specified category not found")
 					return
 				}
 
@@ -311,8 +311,8 @@ func updateTodoHandler(client *ent.Client) http.HandlerFunc {
 		// Todoを更新
 		todo, err := updateQuery.Save(ctx)
 		if err != nil {
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Todoの更新に失敗しました")
-			log.Printf("Todo更新エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Failed to update Todo")
+			log.Printf("Todo update error: %v", err)
 			return
 		}
 
@@ -338,11 +338,11 @@ func deleteTodoHandler(client *ent.Client) http.HandlerFunc {
 		err := client.Todo.DeleteOneID(todoUUID).Exec(ctx)
 		if err != nil {
 			if ent.IsNotFound(err) {
-				sendErrorResponse(w, http.StatusNotFound, "TODO_NOT_FOUND", "指定されたTodoが見つかりません")
+				sendErrorResponse(w, http.StatusNotFound, "TODO_NOT_FOUND", "Specified Todo not found")
 				return
 			}
-			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "データベースエラーが発生しました")
-			log.Printf("Todo削除エラー: %v", err)
+			sendErrorResponse(w, http.StatusInternalServerError, "DB_ERROR", "Database error occurred")
+			log.Printf("Todo deletion error: %v", err)
 			return
 		}
 
@@ -366,7 +366,7 @@ func Open(databaseUrl string) *ent.Client {
 func main() {
 	// .envファイルを読み込み
 	if err := godotenv.Load(); err != nil {
-		log.Printf(".envファイルの読み込みに失敗しました: %v", err)
+		log.Printf("Failed to load .env file: %v", err)
 	}
 
 	// データベース接続情報を環境変数から取得
@@ -378,7 +378,7 @@ func main() {
 		os.Getenv("POSTGRES_DB"),
 	)
 
-	log.Printf("データベースに接続します: %s", dsn)
+	log.Printf("Connecting to database: %s", dsn)
 	client := Open(dsn)
 
 	r := chi.NewRouter()
@@ -404,6 +404,6 @@ func main() {
 	r.Put("/todos/{todoId}", updateTodoHandler(client))
 	r.Delete("/todos/{todoId}", deleteTodoHandler(client))
 
-	log.Printf("サーバーを起動します: http://localhost:8080")
+	log.Printf("Starting server: http://localhost:8080")
 	http.ListenAndServe(":8080", r)
 }
