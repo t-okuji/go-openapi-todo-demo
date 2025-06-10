@@ -397,6 +397,14 @@ func main() {
 		w.Write([]byte("welcome"))
 	})
 
+	// OpenAPI ドキュメント用エンドポイント
+	r.Get("/docs", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "openapi-ui.html")
+	})
+	
+	// OpenAPI仕様ファイルを提供するエンドポイント
+	r.Handle("/openapi/*", http.StripPrefix("/openapi/", http.FileServer(http.Dir("openapi"))))
+
 	// Todo API エンドポイント
 	r.Get("/todos", getTodosHandler(client))
 	r.Post("/todos", createTodoHandler(client))
