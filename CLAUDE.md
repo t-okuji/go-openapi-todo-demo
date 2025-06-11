@@ -48,6 +48,9 @@ curl http://localhost:8080/
 # Todo API のテスト
 curl http://localhost:8080/todos
 
+# Category API のテスト
+curl http://localhost:8080/categories
+
 # 依存関係の確認・整理
 go list -m all
 go mod tidy
@@ -126,7 +129,7 @@ go-openapi-todo-demo/
 
 ### 実装状況と注意点
 - **実装済み**: Todo API完全実装（GET, POST, PUT, DELETE）
-- **未実装**: Category API（GET, POST, PUT, DELETE エンドポイント）
+- **実装済み**: Category API完全実装（GET, POST, PUT, DELETE）
 - HTTPサーバーはChi v5フレームワークを使用
 - **環境変数**: .envファイルから自動読み込み（godotenv使用）
 - **DB接続**: 環境変数（POSTGRES_*）から動的に接続文字列を構築

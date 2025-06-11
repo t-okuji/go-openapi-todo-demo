@@ -8,8 +8,8 @@ OpenAPI仕様を使用したTodo管理APIのGoによる実装デモです。カ�
 
 ## 実装状況
 
-- ✅ **実装済み**: `GET /todos` エンドポイント（Todo一覧取得）
-- 🚧 **未実装**: POST、PUT、DELETE エンドポイント、Category API
+- ✅ **実装済み**: Todo API完全実装（全CRUD操作）
+- ✅ **実装済み**: Category API完全実装（全CRUD操作）
 
 ## 機能
 
@@ -106,6 +106,9 @@ curl http://localhost:8080/
 
 # Todo一覧取得
 curl http://localhost:8080/todos
+
+# カテゴリ一覧取得
+curl http://localhost:8080/categories
 ```
 
 ## API仕様
@@ -114,10 +117,10 @@ curl http://localhost:8080/todos
 
 #### エンドポイント一覧
 - ✅ `GET /todos` - Todo一覧の取得（実装済み）
-- 🚧 `POST /todos` - 新規Todoの作成（未実装）
-- 🚧 `GET /todos/{todoId}` - 特定のTodoの取得（未実装）
-- 🚧 `PUT /todos/{todoId}` - Todoの更新（未実装）
-- 🚧 `DELETE /todos/{todoId}` - Todoの削除（未実装）
+- ✅ `POST /todos` - 新規Todoの作成（実装済み）
+- ✅ `GET /todos/{todoId}` - 特定のTodoの取得（実装済み）
+- ✅ `PUT /todos/{todoId}` - Todoの更新（実装済み）
+- ✅ `DELETE /todos/{todoId}` - Todoの削除（実装済み）
 
 #### Todoデータモデル
 ```yaml
@@ -134,11 +137,11 @@ Todo:
 ### Category API
 
 #### エンドポイント一覧
-- 🚧 `GET /categories` - カテゴリ一覧の取得（未実装）
-- 🚧 `POST /categories` - 新規カテゴリの作成（未実装）
-- 🚧 `GET /categories/{categoryId}` - 特定のカテゴリの取得（未実装）
-- 🚧 `PUT /categories/{categoryId}` - カテゴリの更新（未実装）
-- 🚧 `DELETE /categories/{categoryId}` - カテゴリの削除（未実装）
+- ✅ `GET /categories` - カテゴリ一覧の取得（実装済み）
+- ✅ `POST /categories` - 新規カテゴリの作成（実装済み）
+- ✅ `GET /categories/{categoryId}` - 特定のカテゴリの取得（実装済み）
+- ✅ `PUT /categories/{categoryId}` - カテゴリの更新（実装済み）
+- ✅ `DELETE /categories/{categoryId}` - カテゴリの削除（実装済み）
 
 #### Categoryデータモデル
 ```yaml
