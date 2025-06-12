@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-go-openapi-todo-demo - OpenAPIを使用したTodo管理APIのGoによる実装デモ。Entフレームワークを利用し、カテゴリ機能付きのTodo管理システムを構築している。
+OpenAPIベースのTodo管理API - Go言語とEntフレームワークを使用した、カテゴリ機能付きRESTful APIの実装。Chi v5ルーター、PostgreSQL、Docker Composeによる開発環境構築済み。
 
 ## 開発コマンド
 
@@ -127,18 +127,30 @@ go-openapi-todo-demo/
    - カテゴリのCRUD操作
    - Todo管理のためのカテゴリ分類機能
 
-### 実装状況と注意点
-- **実装済み**: Todo API完全実装（GET, POST, PUT, DELETE）
-- **実装済み**: Category API完全実装（GET, POST, PUT, DELETE）
-- HTTPサーバーはChi v5フレームワークを使用
-- **環境変数**: .envファイルから自動読み込み（godotenv使用）
-- **DB接続**: 環境変数（POSTGRES_*）から動的に接続文字列を構築
-- API実装時はOpenAPI仕様に準拠すること
-- Entフレームワークを使用したORMによるデータベース操作
-- レスポンス形式はOpenAPI仕様に合わせてcamelCase（categoryId等）
-- 共通関数（sendJSONResponse、sendErrorResponse）を使用してレスポンス一貫性を保つ
-- UUID検証とエラーハンドリングはparseUUID関数を使用
-- 日本語でのコメントとドキュメント作成を推奨
+### 実装パターンと規約
+
+#### ハンドラー実装
+- ハンドラーはエンティティごとに`handlers/`ディレクトリに分離
+- 各エンドポイントは独立した関数として実装（例: `GetTodos`, `CreateTodo`）
+- コンテキストは`context.Background()`を使用
+- バリデーションはハンドラー内で実装
+
+#### レスポンス処理
+- 共通関数を使用: `utils.SendJSONResponse()`, `utils.SendErrorResponse()`
+- エラーコード体系: `DB_ERROR`, `INVALID_UUID`, `NOT_FOUND`等の構造化されたコード
+- HTTPステータス: RESTful規約準拠（201 Created、204 No Content等）
+- JSONフィールド: OpenAPI仕様に合わせてcamelCase（例: `categoryId`）
+
+#### データベース操作
+- Entクライアントは`main.go`で初期化し、ハンドラーにグローバル変数として渡す
+- UUID検証は`utils.ParseUUID()`を使用
+- 更新・削除前に必ず存在確認を実施
+- 空文字列でフィールドをクリア可能（オプショナルフィールド）
+
+#### 型変換
+- Entエンティティ→APIレスポンス変換: `utils.TodoToResponse()`, `utils.CategoryToResponse()`
+- 入力データ型は`types/types.go`に定義
+- オプショナルフィールドはポインタ型で実装
 
 ### 環境変数設定
 .envファイルに以下の変数を設定：
@@ -149,6 +161,12 @@ POSTGRES_HOST=localhost
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 ```
+
+### データベースマイグレーション
+- マイグレーションファイル: `db/migrations/`ディレクトリ
+- 命名規則: `001_initial_schema.up.sql`, `001_initial_schema.down.sql`
+- 自動タイムスタンプ更新: PostgreSQLトリガーで`updated_at`を管理
+- 外部キー制約: `ON DELETE SET NULL`でカテゴリ削除時の処理
 
 ### 開発環境の要件
 - Go 1.24.4以上

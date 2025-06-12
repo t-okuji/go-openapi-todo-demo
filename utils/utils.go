@@ -62,3 +62,24 @@ func ConvertToTodoResponse(todo *ent.Todo) types.TodoResponse {
 
 	return response
 }
+
+// ConvertToCategoryResponse は Ent の Category エンティティを CategoryResponse に変換する
+func ConvertToCategoryResponse(category *ent.Category) types.CategoryResponse {
+	response := types.CategoryResponse{
+		ID:        category.ID.String(),
+		Name:      category.Name,
+		Color:     category.Color,
+		CreatedAt: category.CreatedAt,
+	}
+
+	// オプションフィールドの処理
+	if category.Description != "" {
+		response.Description = &category.Description
+	}
+
+	if !category.UpdatedAt.IsZero() {
+		response.UpdatedAt = &category.UpdatedAt
+	}
+
+	return response
+}

@@ -79,6 +79,13 @@ func main() {
 	r.Put("/todos/{todoId}", handlers.UpdateTodoHandler(client))
 	r.Delete("/todos/{todoId}", handlers.DeleteTodoHandler(client))
 
+	// Category API エンドポイント
+	r.Get("/categories", handlers.GetCategories(client))
+	r.Post("/categories", handlers.CreateCategory(client))
+	r.Get("/categories/{categoryId}", handlers.GetCategoryByID(client))
+	r.Put("/categories/{categoryId}", handlers.UpdateCategory(client))
+	r.Delete("/categories/{categoryId}", handlers.DeleteCategory(client))
+
 	log.Printf("Starting server: http://localhost:8080")
 	http.ListenAndServe(":8080", r)
 }

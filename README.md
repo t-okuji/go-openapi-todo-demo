@@ -1,10 +1,16 @@
 # Go OpenAPI Todo Demo
 
-OpenAPI仕様を使用したTodo管理APIのGoによる実装デモです。カテゴリ機能を含む完全なTodo管理システムのAPIを提供します。
+OpenAPI仕様ベースのTodo管理REST API - Go言語とEntフレームワークによる実装。カテゴリ機能付きの完全なCRUD操作を提供する本格的なAPIサーバーです。
 
 ## 概要
 
-このプロジェクトは、OpenAPI 3.1.1仕様に基づいたREST APIの実装例です。Go言語とEntフレームワークを使用してTodo管理とカテゴリ管理の機能を提供し、モジュール化されたAPI仕様設計のベストプラクティスを示しています。
+このプロジェクトは、OpenAPI 3.1.1仕様に基づいたREST APIの実装例です。以下の特徴を持つ、プロダクションレディなAPIサーバーの実装パターンを示しています：
+
+- **モジュール化されたOpenAPI仕様**: パス定義とスキーマ定義を分離した保守性の高い構造
+- **型安全なORM**: Entフレームワークによる型安全なデータベース操作
+- **構造化されたエラーハンドリング**: 統一されたエラーレスポンス形式
+- **RESTful設計**: 適切なHTTPステータスコードとレスポンス形式
+- **Docker化された開発環境**: PostgreSQLとの統合開発環境
 
 ## 実装状況
 
@@ -39,6 +45,12 @@ OpenAPI仕様を使用したTodo管理APIのGoによる実装デモです。カ�
 go-openapi-todo-demo/
 ├── main.go                    # メインアプリケーション（Chi + Ent + godotenv）
 ├── .env                       # 環境変数設定（DB接続情報）
+├── handlers/                  # HTTPハンドラー実装
+│   └── todo.go               # Todo/Categoryハンドラー
+├── types/                     # 型定義
+│   └── types.go              # APIリクエスト/レスポンス型
+├── utils/                     # ユーティリティ関数
+│   └── utils.go              # 共通処理（レスポンス、UUID検証等）
 ├── ent/                       # Entコード生成済みORM
 │   ├── schema/               # Entスキーマ定義
 │   ├── todo.go              # Todoエンティティ
@@ -52,6 +64,7 @@ go-openapi-todo-demo/
 │   ├── seed.sql             # サンプルデータ
 │   └── migrations/          # マイグレーションファイル
 ├── compose.yml              # Docker Compose設定
+├── openapi-ui.html          # Stoplight Elements UI
 └── architecture-decisions/  # アーキテクチャ決定記録
 ```
 
@@ -100,15 +113,41 @@ go run main.go
 サーバーは `http://localhost:8080` で起動します。
 
 ### API テスト
+
+#### 基本的な動作確認
 ```bash
-# 基本的な動作確認
+# ヘルスチェック
 curl http://localhost:8080/
 
+# APIドキュメント（Stoplight Elements）
+open http://localhost:8080/docs
+```
+
+#### Todo API
+```bash
 # Todo一覧取得
 curl http://localhost:8080/todos
 
+# 新規Todo作成
+curl -X POST http://localhost:8080/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title": "買い物", "description": "牛乳を買う"}'
+
+# Todo更新（完了状態の変更）
+curl -X PUT http://localhost:8080/todos/{todoId} \
+  -H "Content-Type: application/json" \
+  -d '{"completed": true}'
+```
+
+#### Category API
+```bash
 # カテゴリ一覧取得
 curl http://localhost:8080/categories
+
+# 新規カテゴリ作成
+curl -X POST http://localhost:8080/categories \
+  -H "Content-Type: application/json" \
+  -d '{"name": "仕事", "color": "#0066cc"}'
 ```
 
 ## API仕様
@@ -168,6 +207,23 @@ Category:
 ### API仕様の確認
 OpenAPI仕様ファイルは `openapi/openapi.yml` および `openapi/paths/`、`openapi/components/` ディレクトリ内のファイルで定義されています。
 
+### 開発コマンド
+```bash
+# コード品質チェック
+go vet ./...
+go fmt ./...
+
+# アプリケーションのビルド
+go build -v .
+
+# 依存関係の整理
+go mod tidy
+go mod verify
+
+# Entコード生成（スキーマ変更時）
+go generate ./ent
+```
+
 ### データベース管理
 ```bash
 # データベース接続
@@ -180,11 +236,17 @@ docker compose down
 docker compose down -v
 ```
 
-### ビルドとテスト
-```bash
-# アプリケーションのビルド
-go build -v .
+## アーキテクチャの特徴
 
-# 依存関係の整理
-go mod tidy
-```
+### 実装パターン
+- **ハンドラー分離**: エンティティごとに独立したハンドラーファイル
+- **共通エラー処理**: 構造化されたエラーコードとレスポンス
+- **UUID主キー**: PostgreSQLの`gen_random_uuid()`による自動生成
+- **自動タイムスタンプ**: トリガーによる`updated_at`の自動更新
+
+### セキュリティとバリデーション
+- UUID形式の検証
+- 文字列長の制限（カテゴリ名: 50文字、説明: 255文字）
+- HEXカラーコードのバリデーション
+- 外部キー制約による参照整合性
+
